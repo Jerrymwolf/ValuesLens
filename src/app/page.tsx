@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useAssessmentStore, selectProgress } from '@/stores/assessmentStore';
+import { useAssessmentStore } from '@/stores/assessmentStore';
 import { ALL_VALUES } from '@/lib/data/values';
 import { shuffleArray } from '@/lib/utils/shuffle';
 import { generateSlug } from '@/lib/utils/slugs';
