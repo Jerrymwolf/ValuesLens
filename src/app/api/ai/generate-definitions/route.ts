@@ -7,6 +7,62 @@ import { getValuesContext, getSortingContext } from '@/lib/ai/valuesDomainMap';
 
 const client = new Anthropic();
 
+// Simple in-memory rate limiting
+// For production, use Redis or similar persistent store
+const RATE_LIMIT = 10; // requests per minute per IP
+const RATE_WINDOW_MS = 60000; // 1 minute
+const rateLimitMap = new Map<string, number[]>();
+
+function getClientIP(request: Request): string {
+  const forwarded = request.headers.get('x-forwarded-for');
+  if (forwarded) {
+    return forwarded.split(',')[0].trim();
+  }
+  const realIP = request.headers.get('x-real-ip');
+  if (realIP) {
+    return realIP;
+  }
+  return 'unknown';
+}
+
+function checkRateLimit(ip: string): { allowed: boolean; remaining: number; resetIn: number } {
+  const now = Date.now();
+  const requests = rateLimitMap.get(ip) || [];
+
+  // Filter to only recent requests within the window
+  const recentRequests = requests.filter(t => now - t < RATE_WINDOW_MS);
+
+  if (recentRequests.length >= RATE_LIMIT) {
+    const oldestRequest = Math.min(...recentRequests);
+    const resetIn = Math.ceil((oldestRequest + RATE_WINDOW_MS - now) / 1000);
+    return { allowed: false, remaining: 0, resetIn };
+  }
+
+  // Add current request
+  recentRequests.push(now);
+  rateLimitMap.set(ip, recentRequests);
+
+  return {
+    allowed: true,
+    remaining: RATE_LIMIT - recentRequests.length,
+    resetIn: Math.ceil(RATE_WINDOW_MS / 1000)
+  };
+}
+
+// Cleanup old entries periodically to prevent memory leaks
+setInterval(() => {
+  const now = Date.now();
+  const entries = Array.from(rateLimitMap.entries());
+  for (const [ip, requests] of entries) {
+    const recentRequests = requests.filter(t => now - t < RATE_WINDOW_MS);
+    if (recentRequests.length === 0) {
+      rateLimitMap.delete(ip);
+    } else {
+      rateLimitMap.set(ip, recentRequests);
+    }
+  }
+}, RATE_WINDOW_MS);
+
 interface ValueDefinition {
   tagline: string;
   definition?: string;
@@ -149,6 +205,27 @@ function generateFallbackDefinitions(rankedValues: string[]): Record<string, Val
 
 export async function POST(request: Request) {
   try {
+    // Check rate limit
+    const clientIP = getClientIP(request);
+    const rateLimit = checkRateLimit(clientIP);
+
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        {
+          error: 'Rate limit exceeded. Please try again later.',
+          retryAfter: rateLimit.resetIn
+        },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': String(rateLimit.resetIn),
+            'X-RateLimit-Remaining': '0',
+            'X-RateLimit-Reset': String(rateLimit.resetIn),
+          }
+        }
+      );
+    }
+
     const body: RequestBody = await request.json();
     const { rankedValues, transcript, sortedValues } = body;
 

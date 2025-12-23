@@ -1,18 +1,57 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
-import { useAssessmentStore } from '@/stores/assessmentStore';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useAssessmentStore, selectProgress } from '@/stores/assessmentStore';
 import { ALL_VALUES } from '@/lib/data/values';
 import { shuffleArray } from '@/lib/utils/shuffle';
 import { generateSlug } from '@/lib/utils/slugs';
 
 export default function Home() {
   const router = useRouter();
-  const { initSession, setConsent: setStoreConsent } = useAssessmentStore();
+  const {
+    initSession,
+    setConsent: setStoreConsent,
+    sessionId,
+    currentCardIndex,
+    shuffledValueIds,
+    rankedValues,
+    reset,
+  } = useAssessmentStore();
   const [consent, setConsent] = useState(false);
   const [isStarting, setIsStarting] = useState(false);
+  const [showResumeModal, setShowResumeModal] = useState(false);
+
+  // Check for incomplete session on mount
+  useEffect(() => {
+    if (sessionId && shuffledValueIds.length > 0) {
+      const isIncomplete = currentCardIndex < shuffledValueIds.length || rankedValues.length === 0;
+      if (isIncomplete) {
+        setShowResumeModal(true);
+      }
+    }
+  }, [sessionId, currentCardIndex, shuffledValueIds.length, rankedValues.length]);
+
+  const getResumeRoute = () => {
+    if (currentCardIndex < shuffledValueIds.length) {
+      return '/assess/sort';
+    }
+    if (rankedValues.length === 0) {
+      return '/assess/narrow';
+    }
+    return '/assess/rank';
+  };
+
+  const handleResume = () => {
+    setShowResumeModal(false);
+    router.push(getResumeRoute());
+  };
+
+  const handleStartFresh = () => {
+    reset();
+    setShowResumeModal(false);
+  };
 
   const handleStart = async () => {
     setIsStarting(true);
@@ -137,6 +176,46 @@ export default function Home() {
           <p>A CultureWright Consulting Product</p>
         </div>
       </div>
+
+      {/* Resume Modal */}
+      <AnimatePresence>
+        {showResumeModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4"
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl"
+            >
+              <h2 className="text-xl font-bold text-gray-900 mb-2">
+                Welcome back!
+              </h2>
+              <p className="text-gray-600 mb-6">
+                You have an assessment in progress ({Math.round((currentCardIndex / shuffledValueIds.length) * 100) || 0}% complete). Would you like to continue?
+              </p>
+              <div className="space-y-3">
+                <button
+                  onClick={handleResume}
+                  className="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-full hover:shadow-lg transition-all"
+                >
+                  Continue where I left off
+                </button>
+                <button
+                  onClick={handleStartFresh}
+                  className="w-full py-3 text-gray-600 hover:text-gray-900 font-medium transition-colors"
+                >
+                  Start fresh
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   );
 }

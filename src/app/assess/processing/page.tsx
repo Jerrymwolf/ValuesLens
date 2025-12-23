@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAssessmentStore } from '@/stores/assessmentStore';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 const INSPIRATIONAL_QUOTES = [
   { text: 'Your values are your compass in life.', author: 'Unknown' },
@@ -37,6 +38,7 @@ export default function ProcessingPage() {
   const [error, setError] = useState<string | null>(null);
   const [isRetrying, setIsRetrying] = useState(false);
   const hasStarted = useRef(false);
+  const prefersReducedMotion = useReducedMotion();
 
   // Redirect if no session
   useEffect(() => {
@@ -170,8 +172,8 @@ export default function ProcessingPage() {
             <motion.div
               className="absolute inset-0 rounded-full border-4 border-indigo-100"
               style={{ borderTopColor: '#6366f1' }}
-              animate={{ rotate: 360 }}
-              transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+              animate={prefersReducedMotion ? {} : { rotate: 360 }}
+              transition={prefersReducedMotion ? {} : { duration: 1, repeat: Infinity, ease: 'linear' }}
             />
             <div className="absolute inset-0 flex items-center justify-center">
               <span className="text-3xl">✨</span>
@@ -218,11 +220,11 @@ export default function ProcessingPage() {
               <motion.div
                 key={i}
                 className="w-2 h-2 rounded-full bg-indigo-300"
-                animate={{
+                animate={prefersReducedMotion ? {} : {
                   scale: [1, 1.5, 1],
                   opacity: [0.5, 1, 0.5],
                 }}
-                transition={{
+                transition={prefersReducedMotion ? {} : {
                   duration: 1.5,
                   repeat: Infinity,
                   delay: i * 0.2,

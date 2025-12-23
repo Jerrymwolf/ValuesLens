@@ -3,6 +3,7 @@
 import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion';
 import { useCallback, useEffect, useState } from 'react';
 import type { Value, SortCategory } from '@/lib/types';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 interface SwipeableValueCardProps {
   value: Value;
@@ -23,6 +24,7 @@ export default function SwipeableValueCard({
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const [exitDirection, setExitDirection] = useState<SortCategory | null>(null);
+  const prefersReducedMotion = useReducedMotion();
 
   // Rotate based on x position
   const rotate = useTransform(x, [-200, 200], [-15, 15]);
@@ -124,7 +126,13 @@ export default function SwipeableValueCard({
       dragElastic={0.9}
       onDragEnd={handleDragEnd}
       animate={exitDirection ? getExitPosition() : { x: 0, y: yOffset }}
-      transition={exitDirection ? { duration: 0.3 } : { duration: 0.2 }}
+      transition={
+        prefersReducedMotion
+          ? { duration: 0.01 }
+          : exitDirection
+            ? { duration: 0.3 }
+            : { duration: 0.2 }
+      }
       onAnimationComplete={handleAnimationComplete}
     >
       {/* Card */}
