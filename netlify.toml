@@ -3,7 +3,7 @@
 # ===========================================
 
 [build]
-  command = "npm run build"
+  command = "echo '=== Listing src directory ===' && ls -la src/ && ls -la src/components/ && ls -la src/stores/ && echo '=== Starting build ===' && npm run build"
   publish = ".next"
 
 [build.environment]
