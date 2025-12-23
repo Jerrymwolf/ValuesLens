@@ -6,6 +6,9 @@
   command = "npm run build"
   publish = ".next"
 
+[build.environment]
+  NODE_VERSION = "18"
+
 # Next.js plugin (automatically configures SSR/ISR/etc.)
 [[plugins]]
   package = "@netlify/plugin-nextjs"
