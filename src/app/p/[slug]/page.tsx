@@ -4,6 +4,9 @@ import Link from 'next/link';
 import { db, profiles } from '@/lib/db';
 import { eq } from 'drizzle-orm';
 
+// Force dynamic rendering - this page queries the database at runtime
+export const dynamic = 'force-dynamic';
+
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
