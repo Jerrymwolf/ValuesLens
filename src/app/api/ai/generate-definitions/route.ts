@@ -66,7 +66,7 @@ setInterval(() => {
 interface ValueDefinition {
   tagline: string;
   definition?: string;
-  behavioralAnchor?: string;
+  behavioralAnchors?: string[];
   userEdited: boolean;
 }
 
@@ -85,7 +85,7 @@ interface RequestBody {
 const tools: Anthropic.Tool[] = [
   {
     name: 'generate_value_definition',
-    description: 'Create a personalized value definition with tagline and behavioral anchor',
+    description: 'Create a personalized value definition with tagline and behavioral anchors',
     input_schema: {
       type: 'object' as const,
       properties: {
@@ -95,41 +95,48 @@ const tools: Anthropic.Tool[] = [
         },
         tagline: {
           type: 'string',
-          description: '2-5 memorable words that capture the essence of this value for this person',
+          description: '3-6 memorable words that capture the essence of this value for this person',
         },
         definition: {
           type: 'string',
-          description: '2-3 sentences in second person that explain what this value means to them specifically',
+          description: '3-4 sentences explaining what this value means. Include three critical elements: (1) what this value looks like in daily life, (2) how it guides decision-making, (3) how it shapes relationships with others.',
         },
-        behavioral_anchor: {
-          type: 'string',
-          description: 'A practical decision-making question: "When X, ask: Y?"',
+        behavioral_anchors: {
+          type: 'array',
+          items: { type: 'string' },
+          minItems: 3,
+          maxItems: 5,
+          description: '3-5 practical decision-making questions. Format: "When [situation], ask: [question]?"',
         },
       },
-      required: ['value_id', 'tagline', 'definition', 'behavioral_anchor'],
+      required: ['value_id', 'tagline', 'definition', 'behavioral_anchors'],
     },
   },
 ];
 
 function buildSystemPrompt(): string {
-  return `You are a values articulation specialist. Your role is to help people discover and articulate their personal values in a way that's meaningful and actionable.
+  return `You are a values articulation specialist helping people discover and express their personal values.
 
 PRINCIPLES:
-1. PRESERVE VOICE: When the user provides a transcript about their #1 value, use their actual phrases and language when powerful. Echo back their authentic voice.
+1. PRESERVE VOICE: When the user provides a transcript, incorporate their actual phrases and language. Echo back their authentic voice.
 
-2. BEHAVIORAL: Every value definition must include a behavioral anchor - a practical question they can ask themselves when making decisions. Format: "When [situation], ask: [question]?"
+2. THREE CRITICAL ELEMENTS: Every definition must address:
+   - How this value shows up in daily life
+   - How it guides decision-making
+   - How it shapes relationships with others
 
-3. SECOND PERSON: Write definitions in second person ("You define..." / "For you..."). Make it personal and direct.
+3. BEHAVIORAL ANCHORS: Generate 3-5 practical questions they can ask themselves when making decisions. Format: "When [situation], ask: [question]?"
 
-4. RELATIONAL: For values #2 and #3, consider how they relate to and complement the #1 value.
+4. SECOND PERSON: Write in second person ("You..." / "For you..."). Make it personal and direct.
 
-5. CONCISE: Taglines should be 2-5 words. Definitions should be 2-3 sentences max.
+5. RELATIONAL: For values #2 and #3, consider how they relate to and complement the #1 value.
 
-EXAMPLE BEHAVIORAL ANCHORS:
+EXAMPLE ANCHORS:
 - "When pressure mounts, ask: Can I look at myself in the mirror afterward?"
 - "Before committing, ask: Does this honor what I truly value?"
 - "When faced with shortcuts, ask: Would the person I want to be take this path?"
 - "In conflict, ask: Am I responding with the care this person deserves?"
+- "When making trade-offs, ask: What would I regret not prioritizing?"
 
 Use the generate_value_definition tool for EACH of the top 3 values. Call the tool 3 times total.`;
 }
@@ -167,10 +174,15 @@ ${veryImportantContext}
   if (transcript && transcript.trim().length > 0) {
     prompt += `
 
-USER'S VOICE TRANSCRIPT (about their #1 value, ${VALUES_BY_ID[top3[0]]?.name}):
+USER'S VOICE TRANSCRIPT (about their top 3 values):
 "${transcript}"
 
-IMPORTANT: For the #1 value, incorporate their actual language and phrases where appropriate. Preserve their authentic voice.`;
+IMPORTANT: Parse the transcript for mentions of each value. Incorporate their actual language where appropriate. They may have discussed:
+- ${VALUES_BY_ID[top3[0]]?.name} (#1)
+- ${VALUES_BY_ID[top3[1]]?.name} (#2)
+- ${VALUES_BY_ID[top3[2]]?.name} (#3)
+
+Preserve their authentic voice in each definition.`;
   } else {
     prompt += `
 
@@ -194,8 +206,12 @@ function generateFallbackDefinitions(rankedValues: string[]): Record<string, Val
 
     definitions[id] = {
       tagline: getFallbackTagline(value.name),
-      definition: `${value.name} represents ${value.cardText.toLowerCase()}. This value guides how you approach decisions and relationships.`,
-      behavioralAnchor: `When making important decisions, ask: Does this align with ${value.name.toLowerCase()}?`,
+      definition: `${value.name} represents ${value.cardText.toLowerCase()}. This value guides how you approach decisions and relationships. When you honor this value, you feel aligned with your authentic self.`,
+      behavioralAnchors: [
+        `When making important decisions, ask: Does this align with ${value.name.toLowerCase()}?`,
+        `In moments of doubt, ask: What would honoring ${value.name.toLowerCase()} look like here?`,
+        `Before committing, ask: Will this choice reflect my commitment to ${value.name.toLowerCase()}?`,
+      ],
       userEdited: false,
     };
   }
@@ -271,13 +287,13 @@ export async function POST(request: Request) {
           value_id: string;
           tagline: string;
           definition: string;
-          behavioral_anchor: string;
+          behavioral_anchors: string[];
         };
 
         definitions[input.value_id] = {
           tagline: input.tagline,
           definition: input.definition,
-          behavioralAnchor: input.behavioral_anchor,
+          behavioralAnchors: input.behavioral_anchors,
           userEdited: false,
         };
       }
@@ -291,8 +307,12 @@ export async function POST(request: Request) {
         if (value) {
           definitions[id] = {
             tagline: getFallbackTagline(value.name),
-            definition: `${value.name} represents ${value.cardText.toLowerCase()}. This value guides how you approach decisions and relationships.`,
-            behavioralAnchor: `When making important decisions, ask: Does this align with ${value.name.toLowerCase()}?`,
+            definition: `${value.name} represents ${value.cardText.toLowerCase()}. This value guides how you approach decisions and relationships. When you honor this value, you feel aligned with your authentic self.`,
+            behavioralAnchors: [
+              `When making important decisions, ask: Does this align with ${value.name.toLowerCase()}?`,
+              `In moments of doubt, ask: What would honoring ${value.name.toLowerCase()} look like here?`,
+              `Before committing, ask: Will this choice reflect my commitment to ${value.name.toLowerCase()}?`,
+            ],
             userEdited: false,
           };
         }

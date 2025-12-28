@@ -6,7 +6,7 @@ import { nanoid } from 'nanoid';
 interface ValueDefinition {
   tagline: string;
   definition?: string;
-  behavioralAnchor?: string;
+  behavioralAnchors?: string[];
   userEdited: boolean;
 }
 
@@ -161,6 +161,7 @@ export async function POST(request: Request) {
               valueName,
               tagline: valueDefinitions[valueName]?.tagline || '',
               definition: valueDefinitions[valueName]?.definition,
+              behavioralAnchors: valueDefinitions[valueName]?.behavioralAnchors,
             })),
             createdAt: new Date().toISOString(),
           },
@@ -178,6 +179,7 @@ export async function POST(request: Request) {
             valueName,
             tagline: valueDefinitions[valueName]?.tagline || '',
             definition: valueDefinitions[valueName]?.definition,
+            behavioralAnchors: valueDefinitions[valueName]?.behavioralAnchors,
           })),
           createdAt: new Date().toISOString(),
         },

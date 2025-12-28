@@ -8,7 +8,7 @@ import { getFallbackTagline } from '@/lib/data/fallbackTaglines';
 interface ValueDefinition {
   tagline: string;
   definition?: string;
-  behavioralAnchor?: string;
+  behavioralAnchors?: string[];
   userEdited: boolean;
 }
 
@@ -43,6 +43,7 @@ export async function POST(request: Request) {
         valueName: value?.name || id,
         tagline: def?.tagline || getFallbackTagline(value?.name || ''),
         definition: def?.definition,
+        behavioralAnchors: def?.behavioralAnchors,
       };
     });
 

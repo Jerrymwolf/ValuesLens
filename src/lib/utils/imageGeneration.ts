@@ -3,7 +3,6 @@ import type { CardFormat } from '@/components/ValuesCard';
 
 const DIMENSIONS: Record<CardFormat, { width: number; height: number }> = {
   story: { width: 1080, height: 1920 },
-  square: { width: 1080, height: 1080 },
   landscape: { width: 1200, height: 628 },
 };
 

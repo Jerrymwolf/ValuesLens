@@ -36,13 +36,18 @@ export default function ReviewPage() {
   // If no definitions yet, generate fallbacks
   useEffect(() => {
     if (rankedValues.length > 0 && Object.keys(definitions).length === 0) {
-      const fallbacks: Record<string, { tagline: string; definition: string; userEdited: boolean }> = {};
+      const fallbacks: Record<string, { tagline: string; definition: string; behavioralAnchors: string[]; userEdited: boolean }> = {};
       for (const id of rankedValues.slice(0, 3)) {
         const value = VALUES_BY_ID[id];
         if (value) {
           fallbacks[id] = {
             tagline: getFallbackTagline(value.name),
-            definition: `${value.name} represents ${value.cardText.toLowerCase()}. This value guides how you approach decisions and relationships.`,
+            definition: `${value.name} represents ${value.cardText.toLowerCase()}. This value guides how you approach decisions and relationships. When you honor this value, you feel aligned with your authentic self.`,
+            behavioralAnchors: [
+              `When making important decisions, ask: Does this align with ${value.name.toLowerCase()}?`,
+              `In moments of doubt, ask: What would honoring ${value.name.toLowerCase()} look like here?`,
+              `Before committing, ask: Will this choice reflect my commitment to ${value.name.toLowerCase()}?`,
+            ],
             userEdited: false,
           };
         }
@@ -63,8 +68,13 @@ export default function ReviewPage() {
     })).filter((item) => item.value);
   }, [rankedValues, definitions]);
 
-  const handleUpdate = useCallback((valueId: string, tagline: string, definition?: string) => {
-    updateDefinition(valueId, tagline, definition);
+  const handleUpdate = useCallback((
+    valueId: string,
+    tagline: string,
+    definition?: string,
+    behavioralAnchors?: string[]
+  ) => {
+    updateDefinition(valueId, tagline, definition, behavioralAnchors);
   }, [updateDefinition]);
 
   const handleRegenerate = useCallback(async (valueId: string) => {
@@ -88,7 +98,8 @@ export default function ReviewPage() {
           updateDefinition(
             valueId,
             data.definitions[valueId].tagline,
-            data.definitions[valueId].definition
+            data.definitions[valueId].definition,
+            data.definitions[valueId].behavioralAnchors
           );
         }
       }

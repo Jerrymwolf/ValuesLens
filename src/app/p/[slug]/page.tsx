@@ -135,6 +135,20 @@ export default async function PublicProfilePage({ params }: PageProps) {
                   {item.definition}
                 </p>
               )}
+
+              {/* Behavioral Anchors */}
+              {item.behavioralAnchors && item.behavioralAnchors.length > 0 && (
+                <div className="mt-3 pt-3 border-t border-gray-100">
+                  <p className="text-xs font-medium text-gray-500 mb-2">When making decisions:</p>
+                  <ul className="space-y-1">
+                    {item.behavioralAnchors.slice(0, 3).map((anchor, i) => (
+                      <li key={i} className="text-sm text-indigo-600 italic">
+                        {anchor}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           ))}
         </div>

@@ -80,7 +80,13 @@ export const profiles = pgTable(
       .unique(),
     profileJson: jsonb('profile_json')
       .$type<{
-        top3: { rank: number; valueName: string; tagline: string; definition?: string }[];
+        top3: {
+          rank: number;
+          valueName: string;
+          tagline: string;
+          definition?: string;
+          behavioralAnchors?: string[];
+        }[];
         createdAt: string;
       }>()
       .notNull(),

@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { Download, Link2, Share2, Check, Smartphone, Square, Monitor } from 'lucide-react';
+import { Download, Link2, Share2, Check, Smartphone, Monitor } from 'lucide-react';
 import ValuesCard, { type CardFormat, type ValueWithDefinition } from './ValuesCard';
 import { downloadCard, shareCard, copyToClipboard } from '@/lib/utils/imageGeneration';
 
@@ -13,14 +13,14 @@ interface ShareInterfaceProps {
 
 const FORMAT_OPTIONS: { id: CardFormat; label: string; icon: React.ReactNode; description: string }[] = [
   { id: 'story', label: 'Story', icon: <Smartphone size={18} />, description: 'Instagram/TikTok' },
-  { id: 'square', label: 'Square', icon: <Square size={18} />, description: 'Instagram Feed' },
   { id: 'landscape', label: 'Wide', icon: <Monitor size={18} />, description: 'LinkedIn/Twitter' },
 ];
 
 export default function ShareInterface({ values, shareUrl }: ShareInterfaceProps) {
-  const [format, setFormat] = useState<CardFormat>('square');
+  const [format, setFormat] = useState<CardFormat>('story');
   const [isDownloading, setIsDownloading] = useState(false);
   const [isSharing, setIsSharing] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
   const [copied, setCopied] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -29,20 +29,31 @@ export default function ShareInterface({ values, shareUrl }: ShareInterfaceProps
   const handleDownload = useCallback(async () => {
     if (!cardRef.current) return;
 
+    setIsExporting(true);
     setIsDownloading(true);
+
+    // Small delay to ensure React re-renders with isExportMode=true
+    await new Promise(resolve => setTimeout(resolve, 100));
+
     try {
       await downloadCard(cardRef.current, format, valueName);
     } catch (error) {
       console.error('Download failed:', error);
     } finally {
       setIsDownloading(false);
+      setIsExporting(false);
     }
   }, [format, valueName]);
 
   const handleShare = useCallback(async () => {
     if (!cardRef.current) return;
 
+    setIsExporting(true);
     setIsSharing(true);
+
+    // Small delay to ensure React re-renders with isExportMode=true
+    await new Promise(resolve => setTimeout(resolve, 100));
+
     try {
       const shared = await shareCard(
         cardRef.current,
@@ -59,6 +70,7 @@ export default function ShareInterface({ values, shareUrl }: ShareInterfaceProps
       console.error('Share failed:', error);
     } finally {
       setIsSharing(false);
+      setIsExporting(false);
     }
   }, [format, valueName, shareUrl]);
 
@@ -108,7 +120,7 @@ export default function ShareInterface({ values, shareUrl }: ShareInterfaceProps
           transition={{ duration: 0.2 }}
           className="shadow-2xl rounded-2xl overflow-hidden"
         >
-          <ValuesCard ref={cardRef} values={values} format={format} />
+          <ValuesCard ref={cardRef} values={values} format={format} isExportMode={isExporting} />
         </motion.div>
       </div>
 

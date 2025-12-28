@@ -8,11 +8,11 @@ import { useAssessmentStore } from '@/stores/assessmentStore';
 import { VALUES_BY_ID } from '@/lib/data/values';
 
 const HELPER_PROMPTS = [
-  'Why did you choose this as your #1?',
-  'What does living this value look like day-to-day?',
-  'When have you felt most aligned with this value?',
-  'How do you know when you\'re honoring this value?',
-  'What decision would be easy if you fully lived this value?',
+  'What does your #1 value mean to you personally?',
+  'How does your #2 value show up in your daily life?',
+  'When have you felt most aligned with your #3 value?',
+  'How do these three values work together for you?',
+  'What decisions become easier when you honor these values?',
 ];
 
 const MIN_WORDS = 15;
@@ -47,10 +47,9 @@ export default function DefinePage() {
     return () => clearInterval(interval);
   }, []);
 
-  // Get the #1 value
-  const topValue = useMemo(() => {
-    if (rankedValues.length === 0) return null;
-    return VALUES_BY_ID[rankedValues[0]];
+  // Get all top 3 values
+  const top3Values = useMemo(() => {
+    return rankedValues.slice(0, 3).map(id => VALUES_BY_ID[id]).filter(Boolean);
   }, [rankedValues]);
 
   const handleTranscriptChange = useCallback((text: string) => {
@@ -64,7 +63,7 @@ export default function DefinePage() {
     router.push('/assess/processing');
   };
 
-  if (!sessionId || !topValue) {
+  if (!sessionId || top3Values.length === 0) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="animate-pulse text-gray-400">Loading...</div>
@@ -81,23 +80,25 @@ export default function DefinePage() {
       {/* Header */}
       <div className="text-center mb-6">
         <p className="text-sm text-indigo-600 font-medium mb-2">
-          Your #1 Value
+          Your Top 3 Values
         </p>
-        <h1 className="text-3xl font-bold text-gray-900 mb-1">
-          {topValue.name}
-        </h1>
-        <p className="text-gray-500 text-sm">
-          {topValue.cardText}
-        </p>
+        <div className="flex justify-center gap-4 mb-4">
+          {top3Values.map((v, i) => (
+            <div key={v.id} className="text-center">
+              <span className="text-xs text-gray-500">#{i + 1}</span>
+              <p className="font-semibold text-gray-900">{v.name}</p>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Main prompt */}
       <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-6 mb-6 border border-indigo-100">
         <h2 className="text-xl font-semibold text-gray-900 text-center mb-2">
-          What does <span className="text-indigo-700">{topValue.name}</span> mean to YOU?
+          Tell us about your top 3 values
         </h2>
         <p className="text-gray-600 text-center text-sm">
-          Share in your own words — speak or type below
+          Share what each means to you — our AI will create personalized definitions
         </p>
       </div>
 
@@ -121,7 +122,7 @@ export default function DefinePage() {
       <VoiceRecorder
         onTranscriptChange={handleTranscriptChange}
         minWords={MIN_WORDS}
-        placeholder={`What does ${topValue.name} mean to you? Why is it your #1?`}
+        placeholder="Talk about what these values mean to you. Why did you rank them this way? How do they show up in your life?"
       />
 
       {/* Continue Button */}

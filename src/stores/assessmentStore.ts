@@ -13,7 +13,7 @@ interface Demographics {
 interface ValueDefinition {
   tagline: string;
   definition?: string;
-  behavioralAnchor?: string;
+  behavioralAnchors?: string[];
   userEdited: boolean;
 }
 
@@ -69,7 +69,7 @@ interface AssessmentActions {
   // Definition
   setTranscript: (text: string) => void;
   setDefinitions: (defs: Record<string, ValueDefinition>) => void;
-  updateDefinition: (valueId: string, tagline: string, definition?: string) => void;
+  updateDefinition: (valueId: string, tagline: string, definition?: string, behavioralAnchors?: string[]) => void;
 
   // Sharing
   setShareSlug: (slug: string) => void;
@@ -177,11 +177,11 @@ export const useAssessmentStore = create<AssessmentStore>()(
 
       setDefinitions: (defs) => set({ definitions: defs }),
 
-      updateDefinition: (valueId, tagline, definition) =>
+      updateDefinition: (valueId, tagline, definition, behavioralAnchors) =>
         set((state) => ({
           definitions: {
             ...state.definitions,
-            [valueId]: { tagline, definition, userEdited: true },
+            [valueId]: { tagline, definition, behavioralAnchors, userEdited: true },
           },
         })),
 

@@ -8,7 +8,7 @@ import type { Value } from '@/lib/types';
 interface ValueDefinition {
   tagline: string;
   definition?: string;
-  behavioralAnchor?: string;
+  behavioralAnchors?: string[];
   userEdited: boolean;
 }
 
@@ -171,15 +171,19 @@ export default function DefinitionEditor({
                 </p>
               )}
 
-              {/* Behavioral anchor */}
-              {definition.behavioralAnchor && (
-                <div className="bg-indigo-50 rounded-lg p-3 border border-indigo-100">
-                  <p className="text-sm font-medium text-indigo-800 mb-1">
-                    Decision Anchor
+              {/* Behavioral anchors */}
+              {definition.behavioralAnchors && definition.behavioralAnchors.length > 0 && (
+                <div className="bg-amber-50 rounded-lg p-3 border border-amber-100">
+                  <p className="text-xs font-medium text-amber-800 mb-2">
+                    Decision Questions
                   </p>
-                  <p className="text-sm text-indigo-700 italic">
-                    {definition.behavioralAnchor}
-                  </p>
+                  <ul className="space-y-1">
+                    {definition.behavioralAnchors.map((anchor, i) => (
+                      <li key={i} className="text-sm text-amber-700 italic">
+                        • {anchor}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               )}
 
