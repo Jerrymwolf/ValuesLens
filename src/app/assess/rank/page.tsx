@@ -69,7 +69,7 @@ export default function RankPage() {
     >
       {/* Header */}
       <div className="text-center mb-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+        <h1 className="text-2xl font-bold text-brand-900 mb-2">
           Rank Your Values
         </h1>
         <p className="text-gray-600">
@@ -80,11 +80,11 @@ export default function RankPage() {
       </div>
 
       {/* Current #1 highlight */}
-      <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4 mb-6 border border-indigo-100">
-        <p className="text-sm text-indigo-600 font-medium">
+      <div className="bg-gradient-to-r from-brand-50 to-accent-50 rounded-xl p-4 mb-6 border border-brand-100">
+        <p className="text-sm text-brand-600 font-medium">
           Your #1 value is currently:
         </p>
-        <p className="text-xl font-bold text-indigo-900 mt-1">
+        <p className="text-xl font-bold text-brand-900 mt-1">
           {topValue?.name}
         </p>
       </div>
@@ -104,7 +104,7 @@ export default function RankPage() {
       >
         <button
           onClick={handleContinue}
-          className="w-full py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-full text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all"
+          className="w-full py-4 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-full text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all"
         >
           Continue with {topValue?.name} as #1
         </button>

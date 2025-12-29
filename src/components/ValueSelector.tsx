@@ -29,7 +29,7 @@ export default function ValueSelector({
         <span
           className={`text-sm font-medium px-3 py-1 rounded-full ${
             selected.length === maxSelections
-              ? 'bg-emerald-100 text-emerald-700'
+              ? 'bg-accent-100 text-accent-700'
               : 'bg-gray-100 text-gray-600'
           }`}
         >
@@ -51,13 +51,13 @@ export default function ValueSelector({
               whileTap={{ scale: isDisabled ? 1 : 0.97 }}
               className={`
                 relative p-4 rounded-xl border-2 text-left transition-all
-                focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2
+                focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2
                 ${
                   isSelected
-                    ? 'border-indigo-500 bg-indigo-50'
+                    ? 'border-brand-500 bg-brand-50'
                     : isDisabled
                     ? 'border-gray-100 bg-gray-50 opacity-50 cursor-not-allowed'
-                    : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm'
+                    : 'border-gray-200 bg-white hover:border-brand-300 hover:shadow-sm'
                 }
               `}
               aria-pressed={isSelected}
@@ -68,7 +68,7 @@ export default function ValueSelector({
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  className="absolute top-2 right-2 w-5 h-5 bg-indigo-500 rounded-full flex items-center justify-center"
+                  className="absolute top-2 right-2 w-5 h-5 bg-brand-600 rounded-full flex items-center justify-center"
                 >
                   <Check className="w-3 h-3 text-white" strokeWidth={3} />
                 </motion.div>
@@ -77,7 +77,7 @@ export default function ValueSelector({
               {/* Value name */}
               <span
                 className={`font-medium ${
-                  isSelected ? 'text-indigo-900' : 'text-gray-900'
+                  isSelected ? 'text-brand-900' : 'text-gray-900'
                 }`}
               >
                 {value.name}

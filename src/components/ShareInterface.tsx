@@ -95,7 +95,7 @@ export default function ShareInterface({ values, shareUrl }: ShareInterfaceProps
               onClick={() => setFormat(option.id)}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                 format === option.id
-                  ? 'bg-white text-indigo-600 shadow-sm'
+                  ? 'bg-white text-brand-600 shadow-sm'
                   : 'text-gray-600 hover:text-gray-900'
               }`}
             >
@@ -130,7 +130,7 @@ export default function ShareInterface({ values, shareUrl }: ShareInterfaceProps
         <button
           onClick={handleDownload}
           disabled={isDownloading}
-          className="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          className="w-full py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
           <Download size={20} />
           {isDownloading ? 'Generating...' : 'Download Image'}
@@ -141,7 +141,7 @@ export default function ShareInterface({ values, shareUrl }: ShareInterfaceProps
           <button
             onClick={handleShare}
             disabled={isSharing}
-            className="w-full py-3.5 bg-white text-indigo-600 font-semibold rounded-full border-2 border-indigo-600 hover:bg-indigo-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            className="w-full py-3.5 bg-white text-brand-600 font-semibold rounded-full border-2 border-brand-600 hover:bg-brand-50 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             <Share2 size={20} />
             {isSharing ? 'Sharing...' : 'Share'}

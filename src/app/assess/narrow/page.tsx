@@ -62,7 +62,7 @@ export default function NarrowPage() {
     >
       {/* Header */}
       <div className="text-center mb-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+        <h1 className="text-2xl font-bold text-brand-900 mb-2">
           Narrow to Your Top 5
         </h1>
         <p className="text-gray-600">
@@ -107,7 +107,7 @@ export default function NarrowPage() {
             <button
               onClick={handleContinue}
               disabled={!canContinue}
-              className="w-full py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-full text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
+              className="w-full py-4 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-full text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
             >
               {top5.length < minRequired
                 ? `Select at least ${minRequired} values`

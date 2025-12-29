@@ -31,9 +31,9 @@ export default function CardDeck({ values, currentIndex, onSwipe }: CardDeckProp
           <span>{currentIndex} sorted</span>
           <span>{remaining} remaining</span>
         </div>
-        <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+        <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
           <div
-            className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-300"
+            className="h-full bg-gradient-to-r from-brand-500 to-accent-400 transition-all duration-300"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -76,8 +76,8 @@ export default function CardDeck({ values, currentIndex, onSwipe }: CardDeckProp
           </div>
           <span>Somewhat</span>
         </div>
-        <div className="flex items-center gap-2 text-emerald-500">
-          <div className="w-8 h-8 rounded-full bg-emerald-50 flex items-center justify-center">
+        <div className="flex items-center gap-2 text-accent-600">
+          <div className="w-8 h-8 rounded-full bg-accent-50 flex items-center justify-center">
             →
           </div>
           <span>Very</span>

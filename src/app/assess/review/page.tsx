@@ -21,6 +21,7 @@ export default function ReviewPage() {
   } = useAssessmentStore();
 
   const [regeneratingId, setRegeneratingId] = useState<string | null>(null);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
 
   // Redirect if no session
   useEffect(() => {
@@ -114,6 +115,36 @@ export default function ReviewPage() {
     router.push('/assess/share');
   };
 
+  const handlePurchase = async () => {
+    setIsCheckingOut(true);
+
+    try {
+      const response = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sessionId,
+          rankedValues,
+          definitions,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create checkout session');
+      }
+
+      const { url } = await response.json();
+
+      if (url) {
+        window.location.href = url;
+      }
+    } catch (error) {
+      console.error('Checkout error:', error);
+      alert('Something went wrong. Please try again.');
+      setIsCheckingOut(false);
+    }
+  };
+
   if (!sessionId || top3.length === 0) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
@@ -130,7 +161,7 @@ export default function ReviewPage() {
     >
       {/* Header */}
       <div className="text-center mb-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+        <h1 className="text-2xl font-bold text-brand-900 mb-2">
           Your Values Defined
         </h1>
         <p className="text-gray-600">
@@ -153,45 +184,74 @@ export default function ReviewPage() {
         ))}
       </div>
 
-      {/* Premium teaser */}
-      <div className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-xl p-5 mb-8 border border-purple-100">
-        <div className="flex items-start gap-4">
-          <span className="text-2xl">✨</span>
+      {/* Premium Upsell - Key Conversion Point */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+        className="bg-gradient-to-br from-brand-50 via-white to-accent-50 rounded-2xl p-6 mb-8 border border-brand-200 shadow-lg"
+      >
+        <div className="flex items-center gap-2 mb-3">
+          <span className="text-2xl">📋</span>
           <div>
-            <h3 className="font-semibold text-gray-900 mb-1">
-              Unlock Deep Insights
+            <h3 className="font-bold text-brand-900">
+              Your 2026 Values Report
             </h3>
-            <p className="text-sm text-gray-600 mb-3">
-              Get domain analysis, value tensions, personalized decision frameworks, and definitions for all 5 values.
-            </p>
-            <button
-              disabled
-              className="text-sm text-purple-600 font-medium hover:text-purple-700 disabled:opacity-50"
-            >
-              Coming soon →
-            </button>
+            <p className="text-sm text-gray-500">One-time purchase</p>
           </div>
+          <span className="ml-auto text-2xl font-bold text-brand-700">$12</span>
         </div>
-      </div>
+
+        <p className="text-gray-600 text-sm mb-4">
+          Start the new year with a beautiful, printable report that captures your core values and helps you make aligned decisions.
+        </p>
+
+        <ul className="space-y-2 mb-5">
+          {[
+            'Full definitions for all 5 values',
+            'Personal decision framework',
+            'Beautifully designed PDF report',
+            'Printable values wallet card',
+          ].map((feature, i) => (
+            <li key={i} className="flex items-center gap-2 text-sm text-gray-700">
+              <span className="w-5 h-5 rounded-full bg-accent-100 flex items-center justify-center flex-shrink-0">
+                <span className="text-accent-600 text-xs">✓</span>
+              </span>
+              {feature}
+            </li>
+          ))}
+        </ul>
+
+        <button
+          onClick={handlePurchase}
+          disabled={isCheckingOut}
+          className="w-full py-3 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-full shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+        >
+          {isCheckingOut ? 'Redirecting...' : 'Get My 2026 Report'}
+        </button>
+
+        <p className="text-center text-xs text-gray-400 mt-3">
+          Secure checkout · Instant PDF download
+        </p>
+      </motion.div>
 
       {/* Continue Button */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
+        transition={{ delay: 0.4 }}
       >
         <button
           onClick={handleContinue}
-          className="w-full py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-full text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all"
+          className="w-full py-4 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-full text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all"
         >
           Create My Values Card
         </button>
+        <p className="text-center text-sm text-gray-400 mt-3">
+          Free — share your values with the world
+        </p>
       </motion.div>
 
-      {/* Edit hint */}
-      <p className="text-center text-sm text-gray-400 mt-4">
-        Tap the pencil icon to edit any definition
-      </p>
     </motion.div>
   );
 }

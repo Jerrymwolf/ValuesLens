@@ -30,7 +30,7 @@ export async function GET(
               justifyContent: 'center',
               width: '100%',
               height: '100%',
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              background: 'linear-gradient(135deg, #0268A0 0%, #0279AF 50%, #8FD932 100%)',
               padding: 60,
             }}
           >
@@ -42,7 +42,7 @@ export async function GET(
                 marginBottom: 20,
               }}
             >
-              ValuesProfile
+              ValuesLens
             </div>
             <div
               style={{
@@ -71,7 +71,7 @@ export async function GET(
             flexDirection: 'column',
             width: '100%',
             height: '100%',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background: 'linear-gradient(135deg, #0268A0 0%, #0279AF 50%, #8FD932 100%)',
             padding: 60,
           }}
         >
@@ -160,7 +160,7 @@ export async function GET(
                 <div
                   style={{
                     fontSize: 18,
-                    color: '#4f46e5',
+                    color: '#015E8C',
                     fontStyle: 'italic',
                   }}
                 >
@@ -184,7 +184,7 @@ export async function GET(
                 color: 'rgba(255,255,255,0.7)',
               }}
             >
-              valuesprofile.app
+              valueslens.com
             </div>
           </div>
         </div>
@@ -208,7 +208,7 @@ export async function GET(
             justifyContent: 'center',
             width: '100%',
             height: '100%',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background: 'linear-gradient(135deg, #0268A0 0%, #0279AF 50%, #8FD932 100%)',
           }}
         >
           <div
@@ -218,7 +218,7 @@ export async function GET(
               color: 'white',
             }}
           >
-            ValuesProfile
+            ValuesLens
           </div>
         </div>
       ),

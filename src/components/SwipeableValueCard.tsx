@@ -142,7 +142,7 @@ export default function SwipeableValueCard({
           <>
             {/* Very Important - Right */}
             <motion.div
-              className="absolute top-4 right-4 bg-emerald-500 text-white px-3 py-1 rounded-full text-sm font-medium"
+              className="absolute top-4 right-4 bg-accent-500 text-white px-3 py-1 rounded-full text-sm font-medium"
               style={{ opacity: rightIndicatorOpacity }}
             >
               Very Important
@@ -167,7 +167,7 @@ export default function SwipeableValueCard({
         )}
 
         {/* Value Content */}
-        <h2 className="text-3xl font-bold text-gray-900 mb-4 text-center">
+        <h2 className="text-3xl font-bold text-brand-900 mb-4 text-center">
           {value.name}
         </h2>
         <p className="text-lg text-gray-600 text-center leading-relaxed">

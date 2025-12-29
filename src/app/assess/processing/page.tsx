@@ -152,7 +152,7 @@ export default function ProcessingPage() {
             <button
               onClick={handleRetry}
               disabled={isRetrying}
-              className="w-full py-3 bg-indigo-600 text-white font-medium rounded-full hover:bg-indigo-700 transition-colors disabled:opacity-50"
+              className="w-full py-3 bg-brand-600 text-white font-medium rounded-full hover:bg-brand-700 transition-colors disabled:opacity-50"
             >
               {isRetrying ? 'Retrying...' : 'Try Again'}
             </button>
@@ -170,8 +170,8 @@ export default function ProcessingPage() {
           {/* Animated spinner */}
           <div className="relative w-24 h-24 mb-8">
             <motion.div
-              className="absolute inset-0 rounded-full border-4 border-indigo-100"
-              style={{ borderTopColor: '#6366f1' }}
+              className="absolute inset-0 rounded-full border-4 border-brand-100"
+              style={{ borderTopColor: '#0279AF' }}
               animate={prefersReducedMotion ? {} : { rotate: 360 }}
               transition={prefersReducedMotion ? {} : { duration: 1, repeat: Infinity, ease: 'linear' }}
             />
@@ -219,7 +219,7 @@ export default function ProcessingPage() {
             {[0, 1, 2].map((i) => (
               <motion.div
                 key={i}
-                className="w-2 h-2 rounded-full bg-indigo-300"
+                className="w-2 h-2 rounded-full bg-brand-300"
                 animate={prefersReducedMotion ? {} : {
                   scale: [1, 1.5, 1],
                   opacity: [0.5, 1, 0.5],

@@ -24,13 +24,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
     if (!profile || !profile.profileJson) {
       return {
-        title: 'Profile Not Found | ValuesProfile',
+        title: 'Profile Not Found | ValuesLens',
       };
     }
 
     const top1 = profile.profileJson.top3[0];
-    const title = `My #1 Value: ${top1?.valueName} | ValuesProfile`;
-    const description = `"${top1?.tagline}" - Discover your core values at ValuesProfile`;
+    const title = `My #1 Value: ${top1?.valueName} | ValuesLens`;
+    const description = `"${top1?.tagline}" - Discover your core values at ValuesLens`;
 
     return {
       title,
@@ -50,7 +50,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   } catch {
     return {
-      title: 'ValuesProfile',
+      title: 'ValuesLens',
     };
   }
 }
@@ -91,7 +91,7 @@ export default async function PublicProfilePage({ params }: PageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500">
+    <div className="min-h-screen bg-gradient-to-br from-brand-600 via-brand-500 to-accent-500">
       <div className="max-w-lg mx-auto px-4 py-12">
         {/* Header */}
         <div className="text-center mb-8">
@@ -99,7 +99,7 @@ export default async function PublicProfilePage({ params }: PageProps) {
             MY TOP 3 VALUES
           </h1>
           <p className="text-white/70 text-sm">
-            Discover yours at valuesprofile.app
+            Discover yours at valueslens.com
           </p>
         </div>
 
@@ -125,7 +125,7 @@ export default async function PublicProfilePage({ params }: PageProps) {
               </div>
 
               {/* Tagline */}
-              <p className="text-indigo-700 font-medium italic text-lg">
+              <p className="text-brand-700 font-medium italic text-lg">
                 &ldquo;{item.tagline}&rdquo;
               </p>
 
@@ -142,7 +142,7 @@ export default async function PublicProfilePage({ params }: PageProps) {
                   <p className="text-xs font-medium text-gray-500 mb-2">When making decisions:</p>
                   <ul className="space-y-1">
                     {item.behavioralAnchors.slice(0, 3).map((anchor, i) => (
-                      <li key={i} className="text-sm text-indigo-600 italic">
+                      <li key={i} className="text-sm text-brand-600 italic">
                         {anchor}
                       </li>
                     ))}
@@ -157,7 +157,7 @@ export default async function PublicProfilePage({ params }: PageProps) {
         <div className="text-center">
           <Link
             href="/"
-            className="inline-block px-8 py-4 bg-white text-indigo-600 font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all"
+            className="inline-block px-8 py-4 bg-white text-brand-600 font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all"
           >
             Discover Your Values
           </Link>
@@ -168,7 +168,7 @@ export default async function PublicProfilePage({ params }: PageProps) {
 
         {/* Footer */}
         <div className="text-center mt-12 text-white/50 text-sm">
-          valuesprofile.app
+          valueslens.com
         </div>
       </div>
     </div>

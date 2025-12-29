@@ -35,7 +35,7 @@ export default function AssessLayout({
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-brand-50/30 to-white">
       {/* Header with progress */}
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-sm border-b border-gray-100">
         <div className="max-w-2xl mx-auto px-6 py-4">
@@ -46,18 +46,18 @@ export default function AssessLayout({
                 key={step.path}
                 className={`flex items-center gap-2 text-sm ${
                   step.step === currentStep
-                    ? 'text-indigo-600 font-medium'
+                    ? 'text-brand-600 font-medium'
                     : step.step < currentStep
-                    ? 'text-gray-400'
+                    ? 'text-accent-600'
                     : 'text-gray-300'
                 }`}
               >
                 <div
                   className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
                     step.step === currentStep
-                      ? 'bg-indigo-600 text-white'
+                      ? 'bg-brand-600 text-white ring-2 ring-brand-100'
                       : step.step < currentStep
-                      ? 'bg-gray-300 text-white'
+                      ? 'bg-accent-500 text-white'
                       : 'bg-gray-100 text-gray-400'
                   }`}
                 >
@@ -69,9 +69,9 @@ export default function AssessLayout({
           </div>
 
           {/* Progress bar */}
-          <div className="h-1 bg-gray-100 rounded-full overflow-hidden">
+          <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-500"
+              className="h-full bg-gradient-to-r from-brand-500 to-accent-400 transition-all duration-500"
               style={{ width: `${progress}%` }}
             />
           </div>

@@ -113,11 +113,11 @@ export default function SharePage() {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ type: 'spring', delay: 0.2 }}
-          className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-amber-400 to-amber-500 rounded-full mb-4"
+          className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-accent-400 to-accent-500 rounded-full mb-4"
         >
           <PartyPopper className="w-8 h-8 text-white" />
         </motion.div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+        <h1 className="text-2xl font-bold text-brand-900 mb-2">
           Your Values Card is Ready!
         </h1>
         <p className="text-gray-600">
@@ -159,8 +159,8 @@ export default function SharePage() {
       </div>
 
       {/* Stats teaser */}
-      <div className="mt-8 p-4 bg-gray-50 rounded-xl text-center">
-        <p className="text-sm text-gray-600">
+      <div className="mt-8 p-4 bg-brand-50 rounded-xl text-center border border-brand-100">
+        <p className="text-sm text-brand-700">
           Join thousands who have discovered their core values
         </p>
       </div>

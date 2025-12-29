@@ -79,7 +79,7 @@ export default function DefinePage() {
     >
       {/* Header */}
       <div className="text-center mb-6">
-        <p className="text-sm text-indigo-600 font-medium mb-2">
+        <p className="text-sm text-brand-600 font-medium mb-2">
           Your Top 3 Values
         </p>
         <div className="flex justify-center gap-4 mb-4">
@@ -93,8 +93,8 @@ export default function DefinePage() {
       </div>
 
       {/* Main prompt */}
-      <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-6 mb-6 border border-indigo-100">
-        <h2 className="text-xl font-semibold text-gray-900 text-center mb-2">
+      <div className="bg-gradient-to-r from-brand-50 to-accent-50 rounded-xl p-6 mb-6 border border-brand-100">
+        <h2 className="text-xl font-semibold text-brand-900 text-center mb-2">
           Tell us about your top 3 values
         </h2>
         <p className="text-gray-600 text-center text-sm">
@@ -135,7 +135,7 @@ export default function DefinePage() {
         <button
           onClick={handleContinue}
           disabled={!canContinue}
-          className="w-full py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-full text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
+          className="w-full py-4 bg-brand-600 hover:bg-brand-700 text-white font-semibold rounded-full text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-none"
         >
           {canContinue
             ? 'Generate My Definitions'

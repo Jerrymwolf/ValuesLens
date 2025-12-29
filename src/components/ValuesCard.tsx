@@ -81,7 +81,7 @@ function FlipValueCard({ item, rank, isCompact, isExportMode = false }: FlipValu
               {item.value.name}
             </span>
           </div>
-          <p className={`text-indigo-700 font-medium italic ${isCompact ? 'text-xs' : 'text-base'}`}>
+          <p className={`text-brand-700 font-medium italic ${isCompact ? 'text-xs' : 'text-base'}`}>
             &ldquo;{item.tagline}&rdquo;
           </p>
           {canFlip && (
@@ -116,7 +116,7 @@ function FlipValueCard({ item, rank, isCompact, isExportMode = false }: FlipValu
               <p className="text-xs font-medium text-gray-500 mb-1">Decision questions:</p>
               <ul className="space-y-1">
                 {item.behavioralAnchors.slice(0, 3).map((anchor, i) => (
-                  <li key={i} className="text-xs text-indigo-600 italic">
+                  <li key={i} className="text-xs text-brand-600 italic">
                     • {anchor}
                   </li>
                 ))}
@@ -150,7 +150,7 @@ const ValuesCard = forwardRef<HTMLDivElement, ValuesCardProps>(
         }}
       >
         {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500" />
+        <div className="absolute inset-0 bg-gradient-to-br from-brand-600 via-brand-500 to-accent-500" />
 
         {/* Pattern overlay */}
         <div
@@ -206,7 +206,7 @@ const ValuesCard = forwardRef<HTMLDivElement, ValuesCardProps>(
                 isCompact ? 'text-xs' : 'text-sm'
               }`}
             >
-              valuesprofile.app
+              valueslens.com
             </p>
           </div>
         </div>
